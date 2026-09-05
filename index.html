@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher's Day Animated Tribute</title>
+    <style>
+        body { margin: 0; background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        /* 9:16 Aspect Ratio Container */
+        .container { position: relative; width: min(100vw, calc(100vh * 9 / 16)); height: min(100vh, calc(100vw * 16 / 9)); background: #000; overflow: hidden; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
+
+        /* Base Image Layers with Slow Zoom (Ken Burns effect) */
+        .scene { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 2s ease-in-out, transform 6s ease-in-out; z-index: 1; transform: scale(1); }
+        .scene.active { opacity: 1; z-index: 2; transform: scale(1.1); }
+
+        /* Text Overlay Layers - Fade in/out */
+        .text-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; z-index: 10; opacity: 0; transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out; pointer-events: none; }
+        
+        /* Active Text with different entrance transitions */
+        .text-overlay.active { opacity: 1; transform: translateY(0); }
+        
+        /* Staggering different types of text animations */
+        .slide-up { transform: translateY(50px); }
+        .slide-up.active { transform: translateY(0); }
+        
+        .zoom-in { transform: scale(0.5); }
+        .zoom-in.active { transform: scale(1); }
+
+        /* Text Styles */
+        .white-text { color: #fff; font-size: 3.5rem; font-weight: 900; letter-spacing: 5px; text-shadow: 2px 2px 10px #000; }
+        
+        /* Neon Colors (Requirement) */
+        .neon-gold { color: #FFD700; font-size: 4rem; font-weight: bold; text-shadow: 0 0 10px #fff, 0 0 20px #ffd700, 0 0 40px #ff8c00, 0 0 80px #ff8c00; animation: neonFlicker 1.5s infinite alternate; }
+        .neon-blue { color: #00FFFF; font-size: 3.5rem; font-weight: bold; text-shadow: 0 0 10px #fff, 0 0 20px #00ffff, 0 0 40px #00bfff; }
+        
+        /* Gold Shimmer Effect */
+        .shimmer-gold { font-size: 4rem; font-weight: bold; background: linear-gradient(45deg, #ffd700, #fff, #ffd700); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shimmer 3s linear infinite; }
+        
+        /* Chalk Style */
+        .chalk-text { color: #fff; font-family: 'Comic Sans MS', cursive; font-size: 3.5rem; text-shadow: 2px 2px 5px rgba(255,255,255,0.5); }
+
+        /* Formal Colorful Quote for the End */
+        .final-quote { font-size: 2.2rem; font-weight: bold; background: linear-gradient(to right, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; padding: 20px; background-color: rgba(0,0,0,0.5); border-radius: 15px; border: 2px solid rgba(255,255,255,0.3); }
+
+        /* Party Popper / Confetti Layers */
+        .confetti { position: absolute; top: -10px; width: 10px; height: 15px; background-color: #f00; z-index: 20; opacity: 0; animation: fall 3s linear infinite; }
+        @keyframes fall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+        @keyframes neonFlicker { 0% { opacity: 1; } 50% { opacity: 0.8; } 100% { opacity: 1; } }
+        @keyframes shimmer { to { background-position: 200% center; } }
+
+        /* Watermark (Exact requirement) */
+        h6.watermark { position: absolute; bottom: 10px; right: 10px; color: grey; font-size: 10px; z-index: 100; margin: 0; pointer-events: none; text-shadow: 1px 1px 2px #000; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Images go here via JS -->
+    <h6 class="watermark">©bhargavlabs 2026</h6>
+</div>
+
+<script>
+    // 1. Define images (Must be named 1.jpg to 7.jpg in the same folder)
+    const images = [
+        "1.jpg", // Gold Lens Flare
+        "2.jpg", // Gold Shine
+        "3.jpg", // Bokeh
+        "4.jpg", // Chalkboard
+        "5.jpg", // Lavender
+        "6.jpg", // Butterflies
+        "7.jpg"  // Peach Floral Quote
+    ];
+
+    // 2. Define animated texts for each scene matching image styles
+    const texts = [
+        '<div class="white-text slide-up">HAPPY</div><div class="neon-gold slide-up" style="animation-delay: 0.5s;">TEACHERS DAY</div>',
+        '<div class="shimmer-gold zoom-in">Golden Gratitude</div>',
+        '<div class="neon-blue slide-up">Illuminating Futures</div>',
+        '<div class="chalk-text zoom-in">A Tribute to Guides</div>',
+        '<div class="shimmer-gold slide-up">Thank You, Teacher</div>',
+        '<div class="neon-blue zoom-in">Inspiring Growth</div>',
+        '<div class="final-quote">"Teaching is the profession that creates all other professions."</div>'
+    ];
+
+    const container = document.querySelector('.container');
+    
+    // Create Images and Text Overlays
+    images.forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.classList.add('scene');
+        container.appendChild(img);
+        
+        const textDiv = document.createElement('div');
+        textDiv.classList.add('text-overlay');
+        container.appendChild(textDiv);
+    });
+
+    const sceneElements = document.querySelectorAll('.scene');
+    const textElements = document.querySelectorAll('.text-overlay');
+    let currentIndex = 0;
+
+    // Show first image and text
+    sceneElements[currentIndex].classList.add('active');
+    textElements[currentIndex].innerHTML = texts[currentIndex];
+    textElements[currentIndex].classList.add('active');
+
+    // Timeline: 7 images * 4 seconds = 28 seconds total (within 20-30s limit)
+    setInterval(() => {
+        // Remove active classes from current
+        sceneElements[currentIndex].classList.remove('active');
+        textElements[currentIndex].classList.remove('active');
+
+        // Increment index
+        currentIndex = (currentIndex + 1) % sceneElements.length;
+
+        // Add active classes to next, inject new text
+        sceneElements[currentIndex].classList.add('active');
+        textElements[currentIndex].innerHTML = texts[currentIndex];
+        textElements[currentIndex].classList.add('active');
+
+        // Trigger Party Popper on the final scene (Index 6)
+        if (currentIndex === 6) {
+            launchPartyPopper();
+        }
+    }, 4000); // 4 seconds per scene
+
+    // 3. Party Popper Confetti Logic
+    function launchPartyPopper() {
+        const colors = ['#FF0000', '#FF7300', '#FFFB00', '#48FF00', '#00FFD5', '#002BFF', '#7A00FF'];
+        for (let i = 0; i < 100; i++) {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti');
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDelay = Math.random() * 3 + 's';
+            confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            container.appendChild(confetti);
+            
+            // Remove confetti after animation so it doesn't lag the page
+            setTimeout(() => {
+                confetti.remove();
+            }, 6000);
+        }
+    }
+</script>
+</body>
+</html>
